@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { NavigationItem, SiteSettings } from "@/domain/content/types";
 
 type FooterProps = {
@@ -17,13 +18,18 @@ export function Footer({ primaryItems, secondaryItems, site }: FooterProps) {
             className="brand brand--footer"
             href="/"
           >
-            <span className="brand__kicker">Bauelemente</span>
-            <span className="wordmark">KLOTZ</span>
+            <Image
+              src="/images/logo.webp"
+              alt="KLOTZ Bauelemente"
+              width={400}
+              height={214}
+              sizes="128px"
+            />
           </Link>
           <p>{site.tagline}</p>
           <p className="legacy-note">
-            Konzeptstand · Kontaktdaten und Bildrechte werden vor
-            Veröffentlichung final bestätigt.
+            Persönliche Präsentationsversion für KLOTZ. Anfragen werden im Demo
+            nicht versendet.
           </p>
         </div>
 

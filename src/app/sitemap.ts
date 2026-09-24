@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 import { overviewPages } from "@/content/pages";
 import { featuredArticles, featuredProjects } from "@/content/site";
-import { getSiteUrl } from "@/lib/site-url";
+import { getSiteUrl, isIndexingAllowed } from "@/lib/site-url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  if (!isIndexingAllowed()) return [];
   const origin = getSiteUrl().origin;
   const paths = [
     "",

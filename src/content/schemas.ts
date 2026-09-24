@@ -9,12 +9,19 @@ const contentStatusSchema = z.enum([
 ]);
 
 const imageSchema = z.object({
-  src: z.string().url(),
+  src: z
+    .string()
+    .refine((value) => value.startsWith("/images/") || URL.canParse(value)),
   alt: z.string(),
   width: z.number().int().positive(),
   height: z.number().int().positive(),
   sourceUrl: z.string().url(),
-  rightsStatus: z.enum(["rights-check", "approved", "concept"]),
+  rightsStatus: z.enum([
+    "rights-check",
+    "approved",
+    "concept",
+    "client-presentation-approved",
+  ]),
 });
 
 export const siteSettingsSchema = z.object({

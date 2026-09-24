@@ -1,12 +1,4 @@
-export type OverviewPageContent = {
-  slug: string;
-  eyebrow: string;
-  title: string;
-  intro: string;
-  heading: string;
-  body: string[];
-  features: string[];
-};
+import type { OverviewPageContent } from "@/domain/content/presentation";
 
 export const overviewPages: OverviewPageContent[] = [
   {
@@ -225,10 +217,10 @@ export const overviewPages: OverviewPageContent[] = [
     eyebrow: "Rechtliches",
     title: "Impressum",
     intro:
-      "Rechtliche Pflichtangaben werden vor Veröffentlichung aus dem aktuellen, anwaltlich geprüften Bestand übernommen.",
+      "Diese Präsentationsversion ist für die persönliche Abstimmung mit KLOTZ bestimmt.",
     heading: "Noch nicht zur Veröffentlichung freigegeben.",
     body: [
-      "Diese Demoseite ist nicht öffentlich indexiert. Vertretungsberechtigte, Registerdaten, Umsatzsteuer-ID und weitere Pflichtangaben müssen vor einem Livegang vollständig geprüft werden.",
+      "Die Angaben für eine öffentliche Website werden separat mit KLOTZ geprüft: Vertretungsberechtigte, Registerdaten, Umsatzsteuer-ID und weitere Pflichtangaben. Eine rechtliche Freigabe liegt für dieses Demo nicht vor.",
     ],
     features: [
       "Firmenangaben prüfen",
@@ -242,10 +234,13 @@ export const overviewPages: OverviewPageContent[] = [
     eyebrow: "Rechtliches",
     title: "Datenschutz",
     intro:
-      "Die finale Datenschutzerklärung richtet sich nach Hosting, Tracking, Formularen und eingebundenen Diensten.",
+      "Informationen zur Datenverarbeitung in dieser lokalen Präsentationsversion.",
     heading: "Datenschutz wird technisch mitgedacht.",
     body: [
-      "Das Demo lädt keine Analyse- oder Marketingdienste. Vor dem Livegang werden Datenflüsse, Aufbewahrungsfristen, Einwilligungen und Auftragsverarbeiter vollständig dokumentiert.",
+      "Dieses Demo lädt keine Analyse- oder Marketingdienste. Bilder und Schrift werden vom lokalen Webserver bereitgestellt. Beim Aufruf verarbeitet der Server technisch notwendige Verbindungsdaten.",
+      "Bitte geben Sie in der Demo-Formularprüfung ausschließlich Testdaten ein. Die Angaben werden zur Validierung an den lokalen Server übertragen, aber weder gespeichert noch per E-Mail oder an ein CRM versendet. Ausgewählte Dateien bleiben auf Ihrem Gerät; nur Dateiname, Dateityp und Größe werden zur Prüfung übertragen.",
+      "Telefon-, E-Mail-, WhatsApp- und Kartenlinks öffnen den jeweiligen Dienst erst auf Ihre Initiative. Dabei gelten die Datenschutzbedingungen des gewählten Anbieters. Es werden keine Karten oder sozialen Medien eingebettet.",
+      "Vor einer öffentlichen Veröffentlichung müssen Verantwortlicher, Hosting, Rechtsgrundlagen, Betroffenenrechte und gegebenenfalls Kontakt zur Datenschutzverantwortung abschließend ergänzt und rechtlich geprüft werden.",
     ],
     features: [
       "Datensparsame Technik",

@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { ProjectRequestForm } from "@/components/forms/project-request-form";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Projekt anfragen",
-  description:
-    "Beschreiben Sie Ihr Vorhaben. KLOTZ meldet sich persönlich bei Ihnen.",
-  alternates: { canonical: "/projekt-anfragen" },
-};
+export const metadata: Metadata = pageMetadata(
+  "Projekt anfragen",
+  "Beschreiben Sie Ihr Vorhaben und testen Sie die Projektanfrage in der Präsentationsdemo.",
+  "/projekt-anfragen",
+);
 
 export default function RequestPage() {
   return (

@@ -22,19 +22,20 @@ export const metadata: Metadata = {
   description:
     "Terrassenüberdachungen, Lamellendächer, Fenster, Türen, Zäune und Tore – Beratung, Planung und Montage aus Merseburg.",
   applicationName: "KLOTZ",
+  icons: { icon: { url: "/images/logo.webp", type: "image/webp" } },
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "de_DE",
     siteName: "KLOTZ",
-    title: "KLOTZ | Räume, die bleiben.",
+    title: "KLOTZ | Bauelemente & Outdoor Living",
     description:
       "Hochwertige Lösungen für Haus, Terrasse und Grundstück – regional geplant und fachgerecht montiert.",
     images: [
       {
-        url: "https://www.klotz.mobi/sites/default/files/styles/flexslider_full/public/Slider_Lammelle_20260221_2050x620_0.jpg?itok=XkNFM1IX",
-        width: 2050,
-        height: 620,
+        url: "/images/lamelle-detail-1.webp",
+        width: 768,
+        height: 1024,
         alt: "Lamellendach von KLOTZ",
       },
     ],

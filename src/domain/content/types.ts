@@ -7,7 +7,8 @@ export type ImageAsset = {
   width: number;
   height: number;
   sourceUrl: string;
-  rightsStatus: "rights-check" | "approved" | "concept";
+  rightsStatus:
+    "rights-check" | "approved" | "concept" | "client-presentation-approved";
 };
 
 export type NavigationItem = {

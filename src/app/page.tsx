@@ -1,142 +1,131 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button-link";
-import {
-  ArrowRightIcon,
-  ArrowUpRightIcon,
-  ProcessIcon,
-} from "@/components/ui/icons";
-import { JsonLd } from "@/components/seo/json-ld";
-import { localContentRepository } from "@/repositories/local-content-repository";
-
-const heroImage =
-  "https://www.klotz.mobi/sites/default/files/styles/flexslider_full/public/Slider_Lammelle_20260221_2050x620_0.jpg?itok=XkNFM1IX";
-
+import { ProcessIcon } from "@/components/ui/icons";
+import { ArticleCards, ContactPanel } from "@/components/sections/page-parts";
+import { ProjectCards } from "@/components/sections/project-cards";
+import { localContentRepository as repository } from "@/repositories/local-content-repository";
+import { pageMetadata } from "@/lib/metadata";
+export const metadata = pageMetadata(
+  "Bauelemente & Outdoor Living aus Merseburg",
+  "Terrassenüberdachungen, Fenster, Türen, Zäune und Tore. Persönlich beraten, geplant und montiert – KLOTZ aus Merseburg.",
+  "/",
+);
 export default async function HomePage() {
-  const [site, services, projects, articles, steps] = await Promise.all([
-    localContentRepository.getSiteSettings(),
-    localContentRepository.getServiceCategories(),
-    localContentRepository.getFeaturedProjects(),
-    localContentRepository.getFeaturedArticles(),
-    localContentRepository.getProcessSteps(),
+  const [services, projects, articles, steps] = await Promise.all([
+    repository.getServiceCategories(),
+    repository.getFeaturedProjects(),
+    repository.getFeaturedArticles(),
+    repository.getProcessSteps(),
   ]);
-  const businessService = services.find(
-    (service) => service.id === "business-housing",
-  );
-
-  const localBusiness = {
-    "@context": "https://schema.org",
-    "@type": "HomeAndConstructionBusiness",
-    "@id": `${site.canonicalUrl}/#business`,
-    name: site.legalName,
-    url: site.canonicalUrl,
-    telephone: site.phoneDisplay,
-    email: site.email,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: site.address.street,
-      postalCode: site.address.postalCode,
-      addressLocality: site.address.city,
-      addressCountry: "DE",
-    },
-    areaServed: site.serviceAreas,
-  };
-
   return (
     <main id="main-content">
-      <JsonLd data={localBusiness} />
-
       <section className="hero">
-        <Image
-          className="hero__image"
-          src={heroImage}
-          alt="Modernes Lamellendach an einem Wohnhaus"
-          fill
-          priority
-          sizes="100vw"
-        />
-        <div className="hero__overlay" />
-        <div className="shell hero__inner">
-          <div className="hero__copy">
-            <p className="eyebrow eyebrow--light">
-              <span />
-              Bauelemente & Outdoor Living
-            </p>
-            <h1>
-              Räume,
-              <br />
-              die bleiben.
-            </h1>
-            <p className="hero__lead">
-              Hochwertige Lösungen für Haus, Terrasse und Grundstück –
-              persönlich beraten, präzise geplant und fachgerecht montiert.
-            </p>
-            <div className="hero__actions">
-              <ButtonLink href="/projekt-anfragen" variant="light">
-                Projekt anfragen
-              </ButtonLink>
-              <Link className="text-link text-link--light" href="/referenzen">
-                Referenzen entdecken <ArrowRightIcon />
-              </Link>
-            </div>
+        <div className="hero__copy">
+          <p className="eyebrow">
+            <span />
+            KLOTZ · Merseburg / Meuschau
+          </p>
+          <h1>
+            Bauelemente &<br />
+            <em>Outdoor Living</em>
+            <br />
+            aus Merseburg.
+          </h1>
+          <p className="hero__lead">
+            Mehr Raum für das, was Ihnen wichtig ist.
+            <br />
+            Persönlich beraten, präzise geplant und fachgerecht montiert.
+          </p>
+          <div className="hero__actions">
+            <ButtonLink href="/projekt-anfragen">Projekt anfragen</ButtonLink>
+            <Link className="text-link" href="/referenzen">
+              Referenzen entdecken ↗
+            </Link>
           </div>
-          <div className="hero__fact">
-            <span className="hero__fact-line" />
-            <p>
-              Aus Merseburg.
+          <div className="hero__region">
+            <span>
+              Für Ihr Zuhause.
               <br />
-              Für die Region.
-            </p>
+              Für Ihr Unternehmen.
+            </span>
+            <span>
+              Merseburg · Halle
+              <br />
+              Leipzig · Saalekreis
+            </span>
           </div>
         </div>
-        <div className="hero__scroll" aria-hidden="true">
-          <span />
-          Scroll
+        <div className="hero__media">
+          <Image
+            src="/images/lamelle-detail-1.webp"
+            alt="Lamellendach mit Sitzbereich aus der KLOTZ-Referenzgalerie"
+            fill
+            priority
+            fetchPriority="high"
+            sizes="(max-width:760px) 100vw, 52vw"
+          />
+          <div className="hero__caption">
+            <span>Ein neuer Blick nach draußen.</span>
+            <Link
+              href="/terrasse-garten/lamellendaecher"
+              aria-label="Lamellendächer entdecken"
+            >
+              ↗
+            </Link>
+          </div>
         </div>
       </section>
-
-      <section className="section services-section">
+      <div className="proof-line shell" aria-label="Unser Leistungsspektrum">
+        {["Beratung", "Aufmaß", "Planung", "Montage", "Service"].map((v, i) => (
+          <span key={v}>
+            <small>0{i + 1}</small>
+            {v}
+          </span>
+        ))}
+      </div>
+      <section className="section">
         <div className="shell">
           <div className="section-heading section-heading--split">
             <div>
               <p className="eyebrow">
                 <span />
-                Unsere Leistungen
+                Rund um Ihr Vorhaben
               </p>
               <h2>
-                Alles aus einer Hand.
+                Lösungen, die
                 <br />
-                Bis ins Detail.
+                zu Ihnen passen.
               </h2>
             </div>
             <p>
-              Von der ersten Idee bis zur Montage: Wir verbinden fachliche
-              Beratung, hochwertige Systeme und saubere Umsetzung.
+              Vom Lieblingsplatz im Garten bis zur Lösung für Ihr Objekt.
+              Entdecken Sie, was mit guter Planung möglich wird.
             </p>
           </div>
           <div className="service-grid">
-            {services.map((service, index) => (
+            {services.map((s, i) => (
               <Link
-                className="service-card"
-                href={service.href}
-                key={service.id}
+                className={`service-card service-card--${i + 1}`}
+                href={s.href}
+                key={s.id}
               >
                 <div className="service-card__media">
                   <Image
-                    src={service.image.src}
-                    alt={service.image.alt}
+                    src={i === 0 ? "/images/glas-detail-1.webp" : s.image.src}
+                    alt={s.image.alt}
                     fill
-                    sizes="(max-width: 760px) 100vw, 50vw"
+                    sizes="(max-width:760px) 100vw, 50vw"
                   />
-                  <span className="service-card__number">0{index + 1}</span>
+                  <span className="service-card__number">0{i + 1}</span>
                 </div>
                 <div className="service-card__content">
                   <div>
-                    <h3>{service.title}</h3>
-                    <p>{service.description}</p>
+                    <h3>{s.title}</h3>
+                    <p>{s.description}</p>
                   </div>
                   <span className="round-link" aria-hidden="true">
-                    <ArrowUpRightIcon />
+                    ↗
                   </span>
                 </div>
               </Link>
@@ -144,90 +133,63 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
       <section className="section projects-section">
         <div className="shell">
-          <div className="section-heading section-heading--split section-heading--light">
+          <div className="section-heading section-heading--split">
             <div>
               <p className="eyebrow eyebrow--light">
                 <span />
-                Ausgewählte Projekte
+                KLOTZ Einblicke
               </p>
               <h2>
-                Ergebnisse, die
+                Gute Ideen.
                 <br />
-                für sich sprechen.
+                Reale Ergebnisse.
               </h2>
             </div>
-            <ButtonLink href="/referenzen" variant="secondary">
+            <ButtonLink href="/referenzen" variant="light">
               Alle Referenzen
             </ButtonLink>
           </div>
-          <div className="project-grid">
-            {projects.map((project, index) => (
-              <Link
-                className={`project-card project-card--${index + 1}`}
-                href={project.href}
-                key={project.id}
-              >
-                <Image
-                  src={project.image.src}
-                  alt={project.image.alt}
-                  fill
-                  sizes="(max-width: 800px) 100vw, 66vw"
-                />
-                <div className="project-card__overlay" />
-                <div className="project-card__content">
-                  <p>
-                    {project.category}
-                    {project.region ? ` · ${project.region}` : ""}
-                  </p>
-                  <h3>{project.title}</h3>
-                  <span>
-                    Projekt ansehen <ArrowRightIcon />
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <ProjectCards
+            projects={projects.filter((p) => p.id !== "stadtstadion-fence")}
+          />
         </div>
       </section>
-
       <section className="section process-section">
         <div className="shell">
-          <div className="section-heading section-heading--centered">
+          <div className="section-heading">
             <p className="eyebrow">
               <span />
-              So arbeiten wir
+              Ein klarer Weg
             </p>
             <h2>
-              Ein klarer Weg.
+              Von der ersten Idee
               <br />
-              Ein verlässliches Ergebnis.
+              bis zur Umsetzung.
             </h2>
           </div>
           <ol className="process-list">
-            {steps.map((step) => (
-              <li key={step.number}>
+            {steps.map((s) => (
+              <li key={s.number}>
                 <div className="process-list__top">
-                  <span>{step.number}</span>
-                  <ProcessIcon name={step.icon} />
+                  <span>{s.number}</span>
+                  <ProcessIcon name={s.icon} />
                 </div>
-                <h3>{step.title}</h3>
-                <p>{step.description}</p>
+                <h3>{s.title}</h3>
+                <p>{s.description}</p>
               </li>
             ))}
           </ol>
         </div>
       </section>
-
       <section className="region-section">
         <div className="region-section__image">
           <Image
-            src="https://www.klotz.mobi/sites/default/files/styles/flexslider_full/public/Slider_T%C3%9C_20260221_1.jpg?itok=DyKRGZhg"
-            alt="Hochwertige Terrassenüberdachung mit Glasflächen"
+            src="/images/glas-detail-2.webp"
+            alt="Glaselemente einer KLOTZ-Außenraumlösung"
             fill
-            sizes="(max-width: 900px) 100vw, 50vw"
+            sizes="(max-width:760px) 100vw, 50vw"
           />
         </div>
         <div className="region-section__content">
@@ -241,55 +203,47 @@ export default async function HomePage() {
             Vertrauen.
           </h2>
           <p>
-            Kurze Wege, persönliche Ansprechpartner und ein Blick für das Ganze:
-            KLOTZ begleitet Projekte in Merseburg, Halle, Leipzig und im
-            Saalekreis.
+            In Meuschau zu Hause, in der Region im Einsatz. KLOTZ verbindet
+            Fachberatung, technische Vorbereitung und Montage.
           </p>
-          <ul className="region-list">
-            {site.serviceAreas.map((area) => (
-              <li key={area}>{area}</li>
-            ))}
-          </ul>
-          <ButtonLink href="/unternehmen" variant="primary">
-            KLOTZ kennenlernen
-          </ButtonLink>
+          <p>
+            In der Innen- und Außenausstellung am Standort können Sie
+            Materialien und Möglichkeiten persönlich kennenlernen.
+          </p>
+          <ButtonLink href="/unternehmen">KLOTZ kennenlernen</ButtonLink>
         </div>
       </section>
-
-      <section className="section business-section">
+      <section className="section">
         <div className="shell business-card">
-          <div className="business-card__content">
+          <div>
             <p className="eyebrow eyebrow--light">
               <span />
-              Für Unternehmen & Bestandshalter
+              Gewerbe & Wohnungswirtschaft
             </p>
             <h2>
-              Planbar. Verlässlich.
+              Ihr Objekt.
               <br />
-              Objektgerecht.
+              Unser gemeinsamer Plan.
             </h2>
             <p>
-              Lösungen für Gewerbe, Wohnungswirtschaft und öffentliche
-              Auftraggeber – mit klarer Abstimmung, dokumentierten Leistungen
-              und festen Ansprechpartnern.
+              Bauelemente, Grundstücksabschlüsse und Service für
+              Hausverwaltungen und Unternehmen. Mit Blick auf Bestand, Nutzung
+              und die Abläufe vor Ort.
             </p>
             <ButtonLink href="/gewerbekunden" variant="light">
-              Leistungen für Gewerbekunden
+              Für Geschäftskunden
             </ButtonLink>
           </div>
-          {businessService ? (
-            <div className="business-card__image">
-              <Image
-                src={businessService.image.src}
-                alt={businessService.image.alt}
-                fill
-                sizes="50vw"
-              />
-            </div>
-          ) : null}
+          <div className="business-card__image">
+            <Image
+              src="/images/gewerbe.webp"
+              alt="Outdoor-Lösung aus dem KLOTZ-Portfolio für Gastronomie"
+              fill
+              sizes="(max-width:760px) 100vw, 45vw"
+            />
+          </div>
         </div>
       </section>
-
       <section className="section knowledge-section">
         <div className="shell">
           <div className="section-heading section-heading--split">
@@ -305,56 +259,16 @@ export default async function HomePage() {
               </h2>
             </div>
             <Link className="text-link" href="/wissen">
-              Alle Ratgeber <ArrowRightIcon />
+              Alle Ratgeber ↗
             </Link>
           </div>
-          <div className="article-grid">
-            {articles.map((article) => (
-              <Link
-                className="article-card"
-                href={article.href}
-                key={article.id}
-              >
-                <div className="article-card__meta">
-                  <span>{article.topic}</span>
-                  <span>{article.readingTime}</span>
-                </div>
-                <h3>{article.title}</h3>
-                <p>{article.excerpt}</p>
-                <span className="article-card__link">
-                  Weiterlesen <ArrowRightIcon />
-                </span>
-              </Link>
-            ))}
-          </div>
+          <ArticleCards articles={articles.slice(1)} />
+          <p className="source-caption">
+            Redaktionelle Vorschau · Fachliche Freigabe durch KLOTZ steht aus.
+          </p>
         </div>
       </section>
-
-      <section className="final-cta">
-        <div className="shell final-cta__inner">
-          <p className="eyebrow eyebrow--light">
-            <span />
-            Ihr nächster Schritt
-          </p>
-          <h2>
-            Was dürfen wir
-            <br />
-            für Sie möglich machen?
-          </h2>
-          <p>
-            Erzählen Sie uns von Ihrem Vorhaben. Wir melden uns persönlich bei
-            Ihnen.
-          </p>
-          <div className="final-cta__actions">
-            <ButtonLink href="/projekt-anfragen" variant="light">
-              Projekt anfragen
-            </ButtonLink>
-            <a className="text-link text-link--light" href={site.phoneHref}>
-              {site.phoneDisplay}
-            </a>
-          </div>
-        </div>
-      </section>
+      <ContactPanel />
     </main>
   );
 }

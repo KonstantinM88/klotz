@@ -123,3 +123,35 @@ Legacy-факты разрешено использовать в демо с м�
 - `content/content-status.csv`.
 
 Каждая запись должна содержать `sourceUrl`, `sourceType`, `capturedAt`, `rightsStatus`, `factStatus`, `newRoute`, `notes`.
+
+## Перенос для клиентской презентации — 24.09.2026
+
+Пользователь явно подтвердил разрешение заказчика на изображения и логотип **исключительно для презентации**. Это снимает demo-блокер, но не подтверждает production-права или лицензии производителей/фотографов.
+
+- `content/assets-manifest.json`: 19 записей с прямым `sourceUrl`, страницей-источником, локальным `src`, размерами, размером файла, SHA-256 оригинала, временем сохранения, `rightsStatus=client-presentation-approved`, `factStatus=legacy`.
+- `content/legacy/inventory.json`: ограниченный обход 10 страниц с фактическими URL после редиректа, HTTP-статусом, ссылками и изображениями. Это **не полный crawl и не redirect matrix**.
+- `content/legacy/originals/`: сохранённые исходные ответы сервера; это не обязательно полноразмерные авторские оригиналы. `public/images/`: WebP для локального UI.
+- `scripts/import-legacy.mjs`, `import-gallery.mjs`, `import-selected.mjs`: воспроизводимый импорт выбранных материалов. Повторный импорт — отдельная осознанная операция, не часть build.
+
+| Материал                              | Источник                                                                  | Использование и оговорки                                                                                   |
+| ------------------------------------- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| logo, старые баннеры, Störmthaler See | https://www.klotz.mobi/                                                   | Логотип, категории, подтверждённая legacy-фотография; конкретные размеры и результаты проекта не придуманы |
+| lamelle-detail-1/2/3                  | https://www.klotz.mobi/lamellendach                                       | Hero, услуга и фотоподборка ламельной террасы                                                              |
+| terrasse                              | https://www.klotz.mobi/portfolio/terrassenueberdachung                    | Отдельная фотография стеклянной крыши, не ламельной конструкции                                            |
+| glas-detail-1/2/3                     | https://www.klotz.mobi/glasschiebew%C3%A4nde                              | Подборка стеклянных раздвижных элементов                                                                   |
+| fenster-1                             | https://www.klotz.mobi/portfolio/fenster                                  | Иллюстрация окон; без технических характеристик                                                            |
+| stadtstadion                          | https://www.klotz.mobi/news/einz%C3%A4unung-stadtstadion                  | Legacy-референс ограждения; сохранён оригинальный коллаж                                                   |
+| haustuer-detail, standort             | URL `/portfolio/z%C3%A4une`, редирект на https://www.klotz.mobi/portfolio | Дверь используется в категории; standort — фотография команды, **не showroom**, в UI не используется       |
+| zaun-detail                           | https://www.klotz.mobi/                                                   | Сохранено при отборе, в UI не используется                                                                 |
+
+URL `/portfolio/z%C3%A4une` не является актуальной самостоятельной страницей заборов. Ссылка услуги исправлена на https://www.klotz.mobi/portfolio/zaeune. Публичные ссылки на `standort`/`zaun-detail` в компоненты не добавлены; файлы остаются доступными как локальные статические assets демо.
+
+### Тексты, маршруты и статус фактов
+
+- `src/content/services.ts`: 21 услуга, `sourceRefs` у каждой записи, `status=draft`; новые немецкие тексты о выборе и подготовке, а не дословный перенос рекламы. Маршрут `/{category}/{slug}`.
+- `src/content/articles.ts`: 4 новые статьи, section/checklist/source URL/servicePath. Маршрут `/wissen/{slug}`. На странице показан редакционный draft; фиктивные авторы и эксперты отсутствуют.
+- `src/content/site.ts`: карточки 4 legacy-подборок, категории, контакты, процесс. Изображения сопоставлены manifest; названия и summaries не превращают подборку в подтверждённый паспорт проекта.
+- `src/content/pages.ts`, `src/app/page.tsx`, `src/app/[slug]/page.tsx`: новая немецкая презентационная редактура по S-01–S-06. Компания/showroom опираются на `/ueber-uns`; численность и точный возраст компании не используются как актуальные факты.
+- Контакты и часы — S-04, `legacy-current-check`, не подтверждённые production-данные. Юридические разделы остаются demo-заглушками.
+- Статья о согласованиях использует общие официальные источники: https://mid.sachsen-anhalt.de/bauen-und-wohnen/bauen/page/oeffentliches-baurecht и https://www.bauen-wohnen.sachsen.de/bauordnung.html. Нет универсальных обещаний «разрешение не требуется», численных порогов или юридической консультации.
+- AI-изображения в этом этапе не создавались и не используются.

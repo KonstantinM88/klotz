@@ -64,7 +64,7 @@ export const serviceCategories: ServiceCategory[] = z
         "Terrassenüberdachungen, Lamellendächer, Pergolen und Glaslösungen.",
       href: "/terrasse-garten",
       image: {
-        src: `${legacyBase}/sites/default/files/styles/produkte_gallerie_hauptbild/public/T%C3%9C.JPG?itok=B-yHFG0J`,
+        src: "/images/terrasse.webp",
         alt: "Terrassenüberdachung mit Glasdach und Sonnenschutz",
         width: 740,
         height: 588,
@@ -81,7 +81,7 @@ export const serviceCategories: ServiceCategory[] = z
         "Komfort, Sicherheit und Energieeffizienz passend zum Gebäude.",
       href: "/fenster-tueren",
       image: {
-        src: `${legacyBase}/sites/default/files/styles/flexslider_full/public/Slider_T%C3%BCren_20260221_2200x640px_1.jpg?itok=kIVEEKll`,
+        src: "/images/haustuer-detail.webp",
         alt: "Moderne Hauseingangstür mit Vordach",
         width: 4100,
         height: 1400,
@@ -98,7 +98,7 @@ export const serviceCategories: ServiceCategory[] = z
         "Sichtschutz, Grundstücksabschluss und komfortable Toranlagen.",
       href: "/zaun-tor",
       image: {
-        src: `${legacyBase}/sites/default/files/styles/flexslider_full/public/Zaun%20mit%20Multibox_Wisniowski_2022.jpg?itok=4UyS3N6K`,
+        src: "/images/zaun.webp",
         alt: "Moderner Zaun mit Sichtschutz und integrierter Multibox",
         width: 4100,
         height: 1400,
@@ -115,7 +115,7 @@ export const serviceCategories: ServiceCategory[] = z
         "Planbare Leistungen für Bestand, Objekt und laufenden Service.",
       href: "/gewerbekunden",
       image: {
-        src: `${legacyBase}/sites/default/files/styles/produkte_gallerie_hauptbild/public/IMG%20BRERA%20P_01.jpg?itok=tMc5mHoj`,
+        src: "/images/gewerbe.webp",
         alt: "Architektonische Outdoor-Lösung für Gewerbe und Gastronomie",
         width: 740,
         height: 588,
@@ -128,16 +128,35 @@ export const serviceCategories: ServiceCategory[] = z
 
 export const featuredProjects: Project[] = z.array(projectSchema).parse([
   {
+    id: "glass-walls",
+    slug: "glasschiebewaende",
+    title: "Glas, das Räume öffnet",
+    category: "Terrasse & Garten",
+    href: "/referenzen/glasschiebewaende",
+    summary:
+      "Transparente Seiten für den Außenbereich. Aufnahmen aus der KLOTZ-Galerie Glasschiebewände.",
+    image: {
+      src: "/images/glas-detail-1.webp",
+      alt: "Glasgeschützter Sitzbereich am Haus bei Abendlicht",
+      width: 1024,
+      height: 768,
+      sourceUrl: `${legacyBase}/glasschiebew%C3%A4nde`,
+      rightsStatus: "client-presentation-approved",
+    },
+    status: "legacy",
+    factCompleteness: "partial",
+  },
+  {
     id: "stormthaler-see",
     slug: "ueberdachung-stoermthaler-see",
     title: "Überdachung am Störmthaler See",
     category: "Terrasse & Garten",
     region: "Störmthaler See",
     summary:
-      "Eine bestehende Referenz aus dem KLOTZ-Portfolio. Projektdetails werden mit dem Auftraggeber ergänzt.",
+      "Eine Überdachung am Störmthaler See – Einblicke aus dem KLOTZ-Bildarchiv.",
     href: "/referenzen/ueberdachung-stoermthaler-see",
     image: {
-      src: `${legacyBase}/sites/default/files/styles/flexslider_full/public/Slider_St%C3%B6rmtaler_See_20260221_0.jpg?itok=I4LqzGfE`,
+      src: "/images/stoermthaler-see.webp",
       alt: "Überdachung am Störmthaler See",
       width: 4100,
       height: 1400,
@@ -153,10 +172,10 @@ export const featuredProjects: Project[] = z.array(projectSchema).parse([
     title: "Einzäunung Stadtstadion",
     category: "Zaun & Tor",
     summary:
-      "Ein Projekt aus dem bestehenden Webauftritt. Leistungsumfang und technische Angaben sind noch abzustimmen.",
+      "Einzäunung eines Stadtstadions: ein Beispiel für den Grundstücksabschluss im Objektbereich.",
     href: "/referenzen/einzaeunung-stadtstadion",
     image: {
-      src: `${legacyBase}/sites/default/files/styles/full_post/public/Einz%C3%A4unung_Stadtstadion_02%202025_0.png?itok=jme98AgX`,
+      src: "/images/stadtstadion.webp",
       alt: "Einzäunung an einem Stadtstadion",
       width: 1540,
       height: 800,
@@ -172,14 +191,14 @@ export const featuredProjects: Project[] = z.array(projectSchema).parse([
     title: "Lamellendach",
     category: "Terrasse & Garten",
     summary:
-      "Ausgewähltes Bildmaterial aus dem bestehenden KLOTZ-Auftritt; konkrete Projektdaten folgen nach Freigabe.",
+      "Licht, Schatten und klare Linien: Einblicke in Lamellendächer aus der KLOTZ-Referenzgalerie.",
     href: "/referenzen/lamellendach-referenz",
     image: {
-      src: `${legacyBase}/sites/default/files/styles/flexslider_full/public/Slider_Lammelle_20260221_2050x620_0.jpg?itok=XkNFM1IX`,
+      src: "/images/lamelle-detail-1.webp",
       alt: "Lamellendach an einem Wohnhaus",
       width: 4100,
       height: 1400,
-      sourceUrl: `${legacyBase}/slide/lamellendach`,
+      sourceUrl: `${legacyBase}/lamellendach`,
       rightsStatus: "rights-check",
     },
     status: "legacy",
@@ -189,6 +208,18 @@ export const featuredProjects: Project[] = z.array(projectSchema).parse([
 
 export const featuredArticles: Article[] = z.array(articleSchema).parse([
   {
+    id: "project-process",
+    slug: "vom-aufmass-bis-zur-abnahme",
+    title: "Von der Idee bis zur Abnahme: So planen Sie Ihr Projekt.",
+    excerpt:
+      "Welche Angaben beim Einstieg helfen und worauf es bei Aufmaß, Angebot und Montage ankommt.",
+    href: "/wissen/vom-aufmass-bis-zur-abnahme",
+    topic: "Ablauf & Beratung",
+    readingTime: "3 Min.",
+    updatedAt: "2026-09-24",
+    status: "draft",
+  },
+  {
     id: "terrace-costs",
     slug: "was-kostet-eine-terrassenueberdachung",
     title: "Was kostet eine Terrassenüberdachung mit Montage?",
@@ -196,7 +227,7 @@ export const featuredArticles: Article[] = z.array(articleSchema).parse([
       "Welche Faktoren den Preis beeinflussen – von Konstruktion und Verglasung bis zu Fundament, Sonnenschutz und Montage.",
     href: "/wissen/was-kostet-eine-terrassenueberdachung",
     topic: "Kosten & Planung",
-    readingTime: "7 Min.",
+    readingTime: "3 Min.",
     updatedAt: "2026-09-24",
     status: "draft",
   },
@@ -208,7 +239,7 @@ export const featuredArticles: Article[] = z.array(articleSchema).parse([
       "Licht, Schatten, Wetterschutz und Architektur: die wichtigsten Unterschiede als Entscheidungshilfe.",
     href: "/wissen/lamellendach-oder-glasdach",
     topic: "Terrasse & Garten",
-    readingTime: "6 Min.",
+    readingTime: "3 Min.",
     updatedAt: "2026-09-24",
     status: "draft",
   },
@@ -220,7 +251,7 @@ export const featuredArticles: Article[] = z.array(articleSchema).parse([
       "Warum Standort, Größe und Landesrecht entscheidend sind und welche Fragen vor Projektstart geklärt werden sollten.",
     href: "/wissen/genehmigung-terrassenueberdachung",
     topic: "Genehmigung",
-    readingTime: "5 Min.",
+    readingTime: "3 Min.",
     updatedAt: "2026-09-24",
     status: "draft",
   },

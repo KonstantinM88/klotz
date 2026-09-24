@@ -1,74 +1,109 @@
-import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ButtonLink } from "@/components/ui/button-link";
-import { featuredProjects } from "@/content/site";
-
-type PageProps = { params: Promise<{ slug: string }> };
-
-export function generateStaticParams() {
-  return featuredProjects.map(({ slug }) => ({ slug }));
+import { localContentRepository as repository } from "@/repositories/local-content-repository";
+import { PageIntro, ContactPanel } from "@/components/sections/page-parts";
+import { pageMetadata } from "@/lib/metadata";
+type Props = { params: Promise<{ slug: string }> };
+export async function generateStaticParams() {
+  return (await repository.getFeaturedProjects()).map(({ slug }) => ({ slug }));
 }
-
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const project = featuredProjects.find((item) => item.slug === slug);
-  return project ? { title: project.title, description: project.summary } : {};
+  const p = (await repository.getFeaturedProjects()).find(
+    (p) => p.slug === slug,
+  );
+  return p ? pageMetadata(p.title, p.summary, p.href, p.image.src) : {};
 }
-
-export default async function ProjectDetailPage({ params }: PageProps) {
+export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
-  const project = featuredProjects.find((item) => item.slug === slug);
-  if (!project) notFound();
+  const p = (await repository.getFeaturedProjects()).find(
+    (p) => p.slug === slug,
+  );
+  if (!p) notFound();
+  const gallery =
+    slug === "lamellendach-referenz"
+      ? [
+          "/images/lamelle-detail-1.webp",
+          "/images/lamelle-detail-2.webp",
+          "/images/lamelle-detail-3.webp",
+        ]
+      : slug === "glasschiebewaende"
+        ? [
+            "/images/glas-detail-1.webp",
+            "/images/glas-detail-2.webp",
+            "/images/glas-detail-3.webp",
+          ]
+        : [p.image.src];
   return (
     <main id="main-content">
-      <section className="inner-hero">
-        <div className="shell">
-          <p className="eyebrow eyebrow--light">
-            <span />
-            {project.category}
-          </p>
-          <h1>{project.title}</h1>
-          <p>{project.summary}</p>
-        </div>
-      </section>
-      <section className="detail-media">
-        <Image
-          src={project.image.src}
-          alt={project.image.alt}
-          fill
-          priority
-          sizes="100vw"
-        />
+      <PageIntro
+        title={p.title}
+        intro={p.summary}
+        eyebrow={p.category + (p.region ? " · " + p.region : "")}
+        path={p.href}
+      />
+      <section className="project-gallery shell" aria-label="Bildergalerie">
+        {gallery.map((src, i) => (
+          <figure key={src}>
+            <Image
+              src={src}
+              alt={p.image.alt + (i ? ` – Ansicht ${i + 1}` : "")}
+              width={1200}
+              height={900}
+              priority={i === 0}
+              fetchPriority={i === 0 ? "high" : "auto"}
+              sizes="(max-width:760px) 100vw, 80vw"
+            />
+            <figcaption>
+              0{i + 1} / {p.title} · KLOTZ-Bildarchiv
+            </figcaption>
+          </figure>
+        ))}
       </section>
       <section className="content-section">
-        <div className="shell content-grid">
+        <div className="shell editorial-grid">
           <div>
             <p className="eyebrow">
               <span />
-              Projektprofil
+              Inspiration für Ihr Vorhaben
             </p>
-            <h2>Details folgen nach Kundenfreigabe.</h2>
+            <h2>
+              Was passt zu
+              <br />
+              Ihrem Zuhause?
+            </h2>
           </div>
           <div className="content-copy">
             <p>
-              Dieses Projekt stammt aus dem bestehenden KLOTZ-Webauftritt.
-              Aufgabenstellung, System, Ausführung und technische Daten werden
-              nicht erfunden, sondern gemeinsam mit KLOTZ ergänzt und geprüft.
+              {p.category === "Zaun & Tor"
+                ? "Ein Grundstücksabschluss muss zum Gelände und zur täglichen Nutzung passen. Welche Zugänge, Höhen und Materialien sinnvoll sind, lässt sich an Ihrer konkreten Situation klären."
+                : "Ein geschützter Außenbereich beginnt bei Ihrer Nutzung: ein heller Frühstücksplatz, Schatten am Nachmittag oder ein ruhiger Sitzbereich. Gemeinsam betrachten wir, welche Lösung zu Haus und Grundstück passt."}
             </p>
             <p>
-              So entsteht später eine belastbare Referenzseite, die
-              Interessenten überzeugt und für regionale sowie KI-gestützte Suche
-              verständlich ist.
+              Die Aufnahmen stammen aus der bestehenden KLOTZ-Galerie. Sie
+              zeigen Gestaltung und Ausführung; Maße, Termine und technische
+              Leistungswerte werden daraus nicht abgeleitet.
             </p>
-            <ButtonLink href="/projekt-anfragen">
-              Ähnliches Projekt anfragen
-            </ButtonLink>
+            <Link
+              className="text-link"
+              href={
+                p.category === "Zaun & Tor"
+                  ? "/zaun-tor/zaunanlagen"
+                  : "/terrasse-garten/terrassenueberdachungen"
+              }
+            >
+              Passende Lösungen entdecken ↗
+            </Link>
+            <p>
+              <Link className="text-link" href="/referenzen">
+                ← Alle Referenzen
+              </Link>
+            </p>
           </div>
         </div>
       </section>
+      <ContactPanel />
     </main>
   );
 }

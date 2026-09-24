@@ -21,6 +21,7 @@ export function ButtonLink({
     <Link
       className={`button button--${variant} ${className}`.trim()}
       href={href}
+      prefetch={href === "/projekt-anfragen" ? false : undefined}
     >
       <span>{children}</span>
       {showArrow ? <ArrowRightIcon className="button__icon" /> : null}

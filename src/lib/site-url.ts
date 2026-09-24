@@ -11,5 +11,6 @@ export function getSiteUrl(): URL {
 }
 
 export function isIndexingAllowed(): boolean {
-  return process.env.ALLOW_INDEXING === "true";
+  // This client presentation contains drafts. Indexing needs a separate launch review.
+  return false;
 }

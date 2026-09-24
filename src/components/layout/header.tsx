@@ -1,41 +1,41 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { NavigationItem, SiteSettings } from "@/domain/content/types";
-import { ArrowRightIcon, PhoneIcon } from "@/components/ui/icons";
-import { MobileNavigation } from "@/components/layout/mobile-navigation";
-
-type HeaderProps = {
+import { MobileNavigation } from "./mobile-navigation";
+import { ActiveNavigation } from "./active-navigation";
+export function Header({
+  items,
+  site,
+}: {
   items: NavigationItem[];
   site: SiteSettings;
-};
-
-export function Header({ items, site }: HeaderProps) {
+}) {
   return (
     <header className="site-header">
-      <div className="site-header__inner shell">
-        <Link aria-label="KLOTZ Startseite" className="brand" href="/">
-          <span className="brand__kicker">Bauelemente</span>
-          <span className="wordmark">KLOTZ</span>
+      <div className="shell site-header__inner">
+        <Link className="brand" href="/" aria-label="KLOTZ Startseite">
+          <Image
+            src="/images/logo.webp"
+            alt="KLOTZ Bauelemente – Interieur & Design"
+            width={400}
+            height={214}
+            priority
+            sizes="130px"
+          />
         </Link>
-
-        <nav aria-label="Hauptnavigation" className="desktop-nav">
-          {items.slice(0, 6).map((item) => (
-            <Link href={item.href} key={item.href}>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
+        <ActiveNavigation items={items} />
         <div className="site-header__actions">
           <a className="header-phone" href={site.phoneHref}>
-            <PhoneIcon />
-            <span>{site.phoneDisplay}</span>
+            {site.phoneDisplay}
           </a>
-          <Link className="header-cta" href="/projekt-anfragen">
-            <span>Projekt anfragen</span>
-            <ArrowRightIcon />
+          <Link
+            className="header-cta"
+            href="/projekt-anfragen"
+            prefetch={false}
+          >
+            Projekt anfragen <span aria-hidden="true">↗</span>
           </Link>
         </div>
-
         <MobileNavigation items={items} />
       </div>
     </header>

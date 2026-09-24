@@ -4,14 +4,16 @@
 
 ## Локальный запуск
 
-Требуется Node.js 22.12+.
+Рекомендуется Node.js 24 LTS; полный набор QA проверяется на 24.21.0. Для Lighthouse необходим Node.js 22.19+ (локальный 22.14 не подходит).
 
 ```bash
-npm install --strict-peer-deps
+npm ci --strict-peer-deps
 npm run dev
 ```
 
-Открыть `http://localhost:3000`. По умолчанию демо запрещено для индексации. Настройки окружения описаны в `.env.example`.
+Открыть `http://localhost:3000`. Индексация демо заблокирована в коде и HTTP-заголовках: переменная окружения не может случайно её включить. Настройки окружения описаны в `.env.example`.
+
+Сценарий показа и ограничения: [docs/CLIENT_PRESENTATION.md](docs/CLIENT_PRESENTATION.md).
 
 ## Проверка
 
@@ -20,7 +22,15 @@ npm run typecheck
 npm run lint
 npm test
 npm run build
+npx playwright install chromium
+npm run test:e2e
+npm run format:check
+git diff --check
 ```
+
+Lighthouse запускается отдельно после build: в одном терминале `npm run start -- --hostname 127.0.0.1 --port 3100`, в другом `npm run test:lighthouse`. Не запускать одновременно с e2e, чтобы не искажать показатели. Отчёты: `.lighthouseci/`, `playwright-report/`, screenshots — `test-results/`; они исключены из Git. Playwright по умолчанию запускает свой production-сервер; для уже запущенного сервера на 3100 установите `KLOTZ_EXTERNAL_SERVER=1`.
+
+Форма — только проверка тестовых данных: серверная валидация без сохранения и отправки в KLOTZ. Байты вложений не загружаются. `DEMO_MODE=false` закрывает endpoint, а не активирует production. База данных, почта, аналитика и внешние виджеты не подключены.
 
 ## Что находится в папке
 
