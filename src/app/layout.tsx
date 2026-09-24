@@ -1,0 +1,79 @@
+import type { Metadata, Viewport } from "next";
+import { Manrope } from "next/font/google";
+import { Footer } from "@/components/layout/footer";
+import { Header } from "@/components/layout/header";
+import { MobileActionBar } from "@/components/layout/mobile-action-bar";
+import { localContentRepository } from "@/repositories/local-content-repository";
+import { getSiteUrl, isIndexingAllowed } from "@/lib/site-url";
+import "./globals.css";
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  metadataBase: getSiteUrl(),
+  title: {
+    default: "KLOTZ | Bauelemente & Outdoor Living aus Merseburg",
+    template: "%s | KLOTZ",
+  },
+  description:
+    "Terrassenüberdachungen, Lamellendächer, Fenster, Türen, Zäune und Tore – Beratung, Planung und Montage aus Merseburg.",
+  applicationName: "KLOTZ",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "de_DE",
+    siteName: "KLOTZ",
+    title: "KLOTZ | Räume, die bleiben.",
+    description:
+      "Hochwertige Lösungen für Haus, Terrasse und Grundstück – regional geplant und fachgerecht montiert.",
+    images: [
+      {
+        url: "https://www.klotz.mobi/sites/default/files/styles/flexslider_full/public/Slider_Lammelle_20260221_2050x620_0.jpg?itok=XkNFM1IX",
+        width: 2050,
+        height: 620,
+        alt: "Lamellendach von KLOTZ",
+      },
+    ],
+  },
+  robots: isIndexingAllowed()
+    ? { index: true, follow: true }
+    : { index: false, follow: false, noarchive: true },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#12367a",
+};
+
+export default async function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  const [site, primaryItems, secondaryItems] = await Promise.all([
+    localContentRepository.getSiteSettings(),
+    localContentRepository.getPrimaryNavigation(),
+    localContentRepository.getSecondaryNavigation(),
+  ]);
+
+  return (
+    <html lang="de" className={manrope.variable}>
+      <body>
+        <a className="skip-link" href="#main-content">
+          Zum Inhalt springen
+        </a>
+        <Header items={primaryItems} site={site} />
+        {children}
+        <Footer
+          primaryItems={primaryItems}
+          secondaryItems={secondaryItems}
+          site={site}
+        />
+        <MobileActionBar site={site} />
+      </body>
+    </html>
+  );
+}

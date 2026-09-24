@@ -1,0 +1,6 @@
+.next
+node_modules
+coverage
+package-lock.json
+KLOTZ_Kommerzangebot_RU.md
+MASTER_PROMPT_KLOTZ_DEMO_RU.md
