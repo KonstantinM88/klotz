@@ -153,3 +153,153 @@ test("unknown routes and indexing", async ({ request }) => {
     "<loc>",
   );
 });
+
+test("editorial content works without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 390, height: 844 },
+  });
+  const page = await context.newPage();
+  await page.goto("http://127.0.0.1:3100/");
+  await expect(page.locator("h1")).toContainText("Raum für");
+  await expect(page.locator(".expertise-card")).toHaveCount(4);
+  await page.locator(".expertise-card").first().click();
+  await expect(page).toHaveURL(/terrasse-garten$/);
+  await context.close();
+});
+
+test("reduced motion keeps all editorial content readable", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  for (const section of await page.locator("[data-reveal]").all()) {
+    await section.scrollIntoViewIfNeeded();
+    await expect(section).toBeVisible();
+  }
+  expect(
+    await page.evaluate(
+      () =>
+        document.getAnimations().filter((a) => a.playState === "running")
+          .length,
+    ),
+  ).toBe(0);
+});
+
+test("project guide opens, answers, links and closes accessibly", async ({
+  page,
+}) => {
+  const postedMessages: Array<Array<{ role: string; text: string }>> = [];
+  await page.route("**/api/assistant", async (route) => {
+    if (route.request().method() === "GET")
+      return route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({ mode: "guided" }),
+      });
+    postedMessages.push(route.request().postDataJSON().messages);
+    return route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({
+        mode: "guided",
+        answer:
+          "Terrassenüberdachungen und Lamellendächer sind mögliche Richtungen. Was möchten Sie auf der Terrasse tun?",
+        href: "/terrasse-garten",
+        linkLabel: "Terrasse & Garten ansehen",
+      }),
+    });
+  });
+  await page.goto("/");
+  const trigger = page.getByRole("button", { name: "Projektlotse" });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: /Ihr Projekt beginnt/ });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByText("keine Live-KI")).toBeVisible();
+  await expect(dialog.getByLabel("Ihre Frage")).toBeFocused();
+  const audit = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+    .analyze();
+  expect(audit.violations).toEqual([]);
+  await dialog.getByRole("button", { name: "Terrasse planen" }).click();
+  await expect(
+    dialog.getByText("Terrassenüberdachungen und Lamellendächer", {
+      exact: false,
+    }),
+  ).toBeVisible();
+  await dialog.getByLabel("Ihre Frage").fill("Und seitlicher Schutz?");
+  await dialog.getByRole("button", { name: "Frage senden" }).click();
+  await expect.poll(() => postedMessages.length).toBe(2);
+  expect(postedMessages[1]).toEqual([
+    { role: "visitor", text: "Terrasse planen" },
+    {
+      role: "guide",
+      text: "Terrassenüberdachungen und Lamellendächer sind mögliche Richtungen. Was möchten Sie auf der Terrasse tun?",
+    },
+    { role: "visitor", text: "Und seitlicher Schutz?" },
+  ]);
+  await dialog
+    .getByRole("link", { name: "Terrasse & Garten ansehen" })
+    .last()
+    .click();
+  await expect(page).toHaveURL(/terrasse-garten$/);
+  await expect(dialog).not.toBeVisible();
+  await trigger.click();
+  await dialog.getByRole("button", { name: "Neu starten" }).click();
+  await expect(
+    dialog.getByRole("button", { name: "Terrasse planen" }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).not.toBeVisible();
+  await expect(trigger).toBeFocused();
+});
+
+test("project guide keeps the beginning of a long Russian answer visible", async ({
+  page,
+}, testInfo) => {
+  const longAnswer =
+    "Для выбора решения сначала уточните, как вы хотите использовать пространство. ".repeat(
+      18,
+    );
+  await page.route("**/api/assistant", async (route) => {
+    const isGet = route.request().method() === "GET";
+    return route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify(
+        isGet
+          ? { mode: "live" }
+          : {
+              mode: "live",
+              answer: longAnswer,
+              href: "/terrasse-garten",
+              linkLabel: "Посмотреть решения для террасы",
+            },
+      ),
+    });
+  });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Projektlotse" }).click();
+  const dialog = page.getByRole("dialog", { name: /Ihr Projekt beginnt/ });
+  await dialog
+    .getByLabel("Ihre Frage")
+    .fill("Какой навес подойдёт для террасы?");
+  await dialog.getByRole("button", { name: "Frage senden" }).click();
+  const answer = dialog.locator(".project-guide__message--guide").last();
+  await expect(answer).toContainText("Для выбора решения");
+  await expect
+    .poll(async () =>
+      dialog.locator(".project-guide__conversation").evaluate((scroller) => {
+        const message = scroller.querySelector<HTMLElement>(
+          ".project-guide__message--guide:last-of-type",
+        );
+        if (!message) return false;
+        const distance =
+          message.getBoundingClientRect().top -
+          scroller.getBoundingClientRect().top;
+        return scroller.scrollTop > 0 && distance >= 0 && distance < 35;
+      }),
+    )
+    .toBe(true);
+  await expect(dialog.getByLabel("Ihre Frage")).toBeFocused();
+  await dialog.screenshot({
+    path: testInfo.outputPath("long-russian-answer.png"),
+  });
+});

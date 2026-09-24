@@ -6,6 +6,10 @@ import { MobileActionBar } from "@/components/layout/mobile-action-bar";
 import { localContentRepository } from "@/repositories/local-content-repository";
 import { getSiteUrl, isIndexingAllowed } from "@/lib/site-url";
 import "./globals.css";
+import "@/styles/editorial.css";
+import { RevealMotion } from "@/components/layout/reveal-motion";
+import { ProjectGuide } from "@/components/assistant/project-guide";
+import "@/styles/project-guide.css";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -68,12 +72,14 @@ export default async function RootLayout({
         </a>
         <Header items={primaryItems} site={site} />
         {children}
+        <RevealMotion />
         <Footer
           primaryItems={primaryItems}
           secondaryItems={secondaryItems}
           site={site}
         />
         <MobileActionBar site={site} />
+        <ProjectGuide />
       </body>
     </html>
   );

@@ -11,6 +11,9 @@ type FooterProps = {
 export function Footer({ primaryItems, secondaryItems, site }: FooterProps) {
   return (
     <footer className="site-footer">
+      <div className="shell footer-signature" aria-hidden="true">
+        KLOTZ<span>↗</span>
+      </div>
       <div className="shell site-footer__grid">
         <div className="site-footer__brand">
           <Link

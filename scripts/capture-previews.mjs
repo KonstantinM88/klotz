@@ -10,7 +10,7 @@ try {
     locale: "de-DE",
   });
   for (const [name, route, section] of [
-    ["home", "/", ".hero"],
+    ["home", "/", ".atelier-hero"],
     ["service", "/terrasse-garten/terrassenueberdachungen", ".page-intro"],
     ["reference", "/referenzen/glasschiebewaende", ".project-gallery"],
     ["article", "/wissen/lamellendach-oder-glasdach", ".article-body"],
@@ -35,6 +35,20 @@ try {
     }
   }
   console.log("Mobile viewport previews saved in test-results/previews");
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("http://127.0.0.1:3100/");
+  for (const img of await page.locator("img").all()) {
+    await img.scrollIntoViewIfNeeded();
+    await expect
+      .poll(() => img.evaluate((el) => el.complete && el.naturalWidth > 0))
+      .toBe(true);
+  }
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: "test-results/previews/home-desktop.png" });
+  await page.screenshot({
+    path: "test-results/previews/home-desktop-full.png",
+    fullPage: true,
+  });
 } finally {
   await browser.close();
 }
