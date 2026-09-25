@@ -7,12 +7,13 @@ import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata(
   "Bauelemente & Outdoor Living aus Merseburg",
-  "Terrassenüberdachungen, Fenster, Türen, Zäune und Tore. Persönlich beraten, geplant und montiert – KLOTZ aus Merseburg.",
+  "Terrassenüberdachungen, Fenster, Türen, Zäune und Tore für Privatkunden und Unternehmen. Entdecken Sie KLOTZ in Merseburg und der Region.",
   "/",
   "/images/glas-detail-1.webp",
 );
 export default async function HomePage() {
-  const [services, projects, articles, steps] = await Promise.all([
+  const [home, services, projects, articles, steps] = await Promise.all([
+    repository.getHomeContent(),
     repository.getServiceCategories(),
     repository.getFeaturedProjects(),
     repository.getFeaturedArticles(),
@@ -50,10 +51,9 @@ export default async function HomePage() {
             <br />
             <em>mehr Leben.</em>
           </h1>
+          <p className="atelier-hero__lead">{home.heroLead}</p>
           <div className="atelier-hero__actions">
-            <ButtonLink href="/projekt-anfragen">
-              Ihr Projekt beginnt hier
-            </ButtonLink>
+            <ButtonLink href="/projekt-anfragen">Projekt anfragen</ButtonLink>
             <Link className="hero-discover" href="/referenzen">
               Unsere Referenzen <span aria-hidden="true">↗</span>
             </Link>
@@ -89,11 +89,7 @@ export default async function HomePage() {
             nicht an der <em>Haustür.</em>
           </h2>
           <div className="atelier-intro__copy">
-            <p>
-              Ein Lieblingsplatz im Freien. Fenster, die Licht hereinlassen. Ein
-              Eingang, der zu Ihnen passt. Wir verbinden Ihre Ideen mit
-              durchdachten Lösungen.
-            </p>
+            <p>{home.introCopy}</p>
             <Link className="editorial-link" href="/unternehmen">
               KLOTZ kennenlernen <span aria-hidden="true">↗</span>
             </Link>
@@ -108,6 +104,7 @@ export default async function HomePage() {
             <br />
             <em>Ihr Projekt.</em>
           </h2>
+          <p className="expertise-heading__lead">{home.expertiseLead}</p>
         </div>
         <div className="shell expertise-grid">
           {services.map((s, i) => (
@@ -149,6 +146,7 @@ export default async function HomePage() {
             <br />
             <em>Erlebbar gemacht.</em>
           </h2>
+          <p className="projects-heading__lead">{home.projectsLead}</p>
           <Link className="editorial-link" href="/referenzen">
             Alle Referenzen <span aria-hidden="true">↗</span>
           </Link>
@@ -204,10 +202,7 @@ export default async function HomePage() {
             <br />
             <em>Ein gutes Gefühl.</em>
           </h2>
-          <p>
-            Von der ersten Frage bis zum letzten Detail. Wir begleiten Ihr
-            Vorhaben Schritt für Schritt.
-          </p>
+          <p>{home.processLead}</p>
           <ButtonLink href="/projekt-anfragen">
             Lassen Sie uns sprechen
           </ButtonLink>
@@ -264,11 +259,7 @@ export default async function HomePage() {
             <br />
             <em>Im Detail planen.</em>
           </h2>
-          <p>
-            Bauelemente, Grundstücksabschlüsse und Service für Hausverwaltungen
-            und Unternehmen. Mit Blick auf Bestand, Nutzung und die Abläufe vor
-            Ort.
-          </p>
+          <p>{home.businessLead}</p>
           <Link className="editorial-link" href="/gewerbekunden">
             Lösungen für Ihr Unternehmen <span aria-hidden="true">↗</span>
           </Link>
@@ -300,6 +291,43 @@ export default async function HomePage() {
           <p className="source-caption">
             Redaktionelle Vorschau · Fachliche Freigabe durch KLOTZ steht aus.
           </p>
+        </div>
+      </section>
+      <section className="atelier-faq" aria-labelledby="home-faq-title">
+        <div className="shell atelier-faq__layout">
+          <div className="atelier-faq__intro" data-reveal>
+            <p className="index-label">08 / Gut zu wissen</p>
+            <h2 id="home-faq-title">
+              Fragen, die
+              <br />
+              <em>weiterhelfen.</em>
+            </h2>
+            <p>
+              Ein guter Anfang braucht keine fertige Produktliste. Hier finden
+              Sie erste Antworten und den passenden Weg zu mehr Details.
+            </p>
+          </div>
+          <div className="atelier-faq__list">
+            {home.faq.map((item, index) => (
+              <details key={item.id} className="atelier-faq__item">
+                <summary>
+                  <span className="atelier-faq__number">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="atelier-faq__question">{item.question}</span>
+                  <span className="atelier-faq__icon" aria-hidden="true">
+                    +
+                  </span>
+                </summary>
+                <div className="atelier-faq__answer">
+                  <p>{item.answer}</p>
+                  <Link href={item.href} className="editorial-link">
+                    {item.linkLabel} <span aria-hidden="true">↗</span>
+                  </Link>
+                </div>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
       <ContactPanel />

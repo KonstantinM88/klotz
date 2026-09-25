@@ -9,6 +9,24 @@ export type OverviewPageContent = {
   features: string[];
 };
 export type ContentSection = { title: string; paragraphs: string[] };
+export type HomeFaqItem = {
+  id: string;
+  question: string;
+  answer: string;
+  href: string;
+  linkLabel: string;
+};
+export type HomeContent = {
+  heroLead: string;
+  introCopy: string;
+  expertiseLead: string;
+  projectsLead: string;
+  processLead: string;
+  businessLead: string;
+  faq: HomeFaqItem[];
+  sourceRefs: string[];
+  status: ContentStatus;
+};
 export type ServiceDetail = {
   slug: string;
   category: string;

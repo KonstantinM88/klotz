@@ -194,11 +194,19 @@ h2 em,
   line-height: 0.97;
   font-weight: 450;
   letter-spacing: -0.065em;
-  margin: 0 0 40px;
+  margin: 0 0 24px;
   text-wrap: initial;
 }
 .atelier-hero h1 em {
   color: #e2edcd;
+}
+.atelier-hero__lead {
+  max-width: 570px;
+  margin: 0 0 30px;
+  color: #f0f2e9;
+  font-size: clamp(15px, 1.35vw, 19px);
+  line-height: 1.55;
+  text-wrap: pretty;
 }
 .atelier-hero__actions {
   display: flex;
@@ -300,6 +308,20 @@ h2 em,
   grid-template-columns: 1.12fr 1fr;
   gap: 60px 90px;
   align-items: start;
+}
+.expertise-heading__lead,
+.projects-heading__lead {
+  grid-column: 2;
+  max-width: 500px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.expertise-heading__lead {
+  color: var(--muted);
+}
+.projects-heading__lead {
+  color: #cbd2c5;
 }
 .expertise-card {
   display: block;
@@ -585,6 +607,87 @@ a:hover .image-arrow {
 .atelier-journal {
   padding-block: 100px;
   background: #e8e9e0;
+}
+.atelier-faq {
+  padding-block: 110px 125px;
+  background: var(--paper);
+}
+.atelier-faq__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(50px, 7vw, 120px);
+}
+.atelier-faq__intro h2 {
+  margin: 0 0 30px;
+  font-size: clamp(38px, 4.4vw, 68px);
+}
+.atelier-faq__intro > p:last-child {
+  max-width: 390px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+.atelier-faq__item {
+  border-top: 1px solid #a8b1a1;
+}
+.atelier-faq__item:last-child {
+  border-bottom: 1px solid #a8b1a1;
+}
+.atelier-faq__item summary {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 38px;
+  align-items: center;
+  gap: 20px;
+  min-height: 98px;
+  padding-block: 19px;
+  list-style: none;
+  cursor: pointer;
+}
+.atelier-faq__item summary::-webkit-details-marker {
+  display: none;
+}
+.atelier-faq__item summary:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+.atelier-faq__number {
+  align-self: center;
+  color: var(--muted);
+  font:
+    11px ui-monospace,
+    monospace;
+}
+.atelier-faq__question {
+  font-size: clamp(18px, 1.8vw, 24px);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.035em;
+}
+.atelier-faq__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #a8b1a1;
+  border-radius: 50%;
+  font-size: 23px;
+  line-height: 1;
+}
+.atelier-faq__item[open] .atelier-faq__icon {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: rotate(45deg);
+}
+.atelier-faq__answer {
+  padding: 0 58px 28px 48px;
+}
+.atelier-faq__answer p {
+  max-width: 570px;
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.75;
 }
 .journal-heading {
   display: grid;
@@ -931,7 +1034,12 @@ a:hover .image-arrow {
   }
   .atelier-hero h1 {
     font-size: clamp(56px, 13vw, 95px);
-    margin-bottom: 35px;
+    margin-bottom: 20px;
+  }
+  .atelier-hero__lead {
+    max-width: 390px;
+    margin-bottom: 24px;
+    font-size: 14px;
   }
   .atelier-hero__actions {
     flex-direction: column;
@@ -956,9 +1064,14 @@ a:hover .image-arrow {
   .expertise-heading,
   .projects-heading,
   .journal-heading,
-  .atelier-business {
+  .atelier-business,
+  .atelier-faq__layout {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+  .expertise-heading__lead,
+  .projects-heading__lead {
+    grid-column: 1;
   }
   .atelier-intro,
   .atelier-process,
@@ -1091,6 +1204,27 @@ a:hover .image-arrow {
   }
   .atelier-journal {
     padding-block: 65px;
+  }
+  .atelier-faq {
+    padding-block: 70px 80px;
+  }
+  .atelier-faq__layout {
+    gap: 32px;
+  }
+  .atelier-faq__intro h2 {
+    margin-bottom: 18px;
+  }
+  .atelier-faq__item summary {
+    grid-template-columns: 23px minmax(0, 1fr) 34px;
+    gap: 11px;
+    min-height: 84px;
+  }
+  .atelier-faq__icon {
+    width: 34px;
+    height: 34px;
+  }
+  .atelier-faq__answer {
+    padding: 0 0 24px 34px;
   }
   .journal-heading {
     margin-bottom: 35px;

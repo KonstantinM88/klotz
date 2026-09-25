@@ -33,6 +33,13 @@ try {
         path: `test-results/previews/${name}-detail-mobile.png`,
       });
     }
+    if (name === "home") {
+      await page.locator(".atelier-faq").scrollIntoViewIfNeeded();
+      await page.locator(".atelier-faq summary").first().click();
+      await page.screenshot({
+        path: "test-results/previews/home-faq-mobile.png",
+      });
+    }
   }
   console.log("Mobile viewport previews saved in test-results/previews");
   await page.setViewportSize({ width: 1440, height: 1000 });
@@ -49,6 +56,9 @@ try {
     path: "test-results/previews/home-desktop-full.png",
     fullPage: true,
   });
+  await page.locator(".atelier-faq").scrollIntoViewIfNeeded();
+  await page.locator(".atelier-faq summary").first().click();
+  await page.screenshot({ path: "test-results/previews/home-faq-desktop.png" });
 } finally {
   await browser.close();
 }

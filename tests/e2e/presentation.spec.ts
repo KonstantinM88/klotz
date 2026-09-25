@@ -66,6 +66,42 @@ for (const path of routes)
       });
     },
   );
+
+test("homepage explains the offer and FAQ works with the keyboard", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await expect(page.locator(".atelier-hero__lead")).toContainText(
+    "Terrassenüberdachungen, Fenster, Türen, Zäune und Tore",
+  );
+  const faq = page.getByRole("region", { name: "Fragen, die weiterhelfen." });
+  await expect(faq.locator("details")).toHaveCount(5);
+  const question = faq.locator("summary").filter({
+    hasText: "Was beeinflusst die Kosten eines Projekts?",
+  });
+  await question.focus();
+  await page.keyboard.press("Enter");
+  await expect(question.locator("..")).toHaveAttribute("open", "");
+  await expect(
+    faq.getByRole("link", { name: "Kostenfaktoren verstehen" }),
+  ).toHaveAttribute("href", "/wissen/was-kostet-eine-terrassenueberdachung");
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          document.getAnimations().filter((a) => a.playState === "running")
+            .length,
+      ),
+    )
+    .toBe(0);
+  const audit = await new AxeBuilder({ page })
+    .include(".atelier-faq")
+    .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+    .analyze();
+  expect(audit.violations).toEqual([]);
+  await page.keyboard.press("Enter");
+  await expect(question.locator("..")).not.toHaveAttribute("open", "");
+});
 test("reference filter and crawlable links", async ({ page }) => {
   await page.goto("/referenzen");
   await expect(page.locator(".reference-card")).toHaveCount(4);
@@ -163,6 +199,10 @@ test("editorial content works without JavaScript", async ({ browser }) => {
   await page.goto("http://127.0.0.1:3100/");
   await expect(page.locator("h1")).toContainText("Raum für");
   await expect(page.locator(".expertise-card")).toHaveCount(4);
+  await page.locator(".atelier-faq summary").first().click();
+  await expect(
+    page.getByRole("link", { name: "Lamellendach und Glasdach vergleichen" }),
+  ).toBeVisible();
   await page.locator(".expertise-card").first().click();
   await expect(page).toHaveURL(/terrasse-garten$/);
   await context.close();

@@ -5,6 +5,7 @@ import {
   primaryNavigation,
   serviceCategories,
 } from "@/content/site";
+import { homeContent } from "@/content/home";
 
 function hasUniqueValues(values: string[]): boolean {
   return new Set(values).size === values.length;
@@ -34,6 +35,18 @@ describe("local content", () => {
       if (project.status === "legacy") {
         expect(project.factCompleteness).toBe("partial");
       }
+    }
+  });
+
+  it("keeps home FAQ unique, linked and explicitly editorial", () => {
+    expect(homeContent.status).toBe("draft");
+    expect(homeContent.sourceRefs).toContain("S-01");
+    expect(homeContent.faq).toHaveLength(5);
+    expect(hasUniqueValues(homeContent.faq.map((item) => item.id))).toBe(true);
+    for (const item of homeContent.faq) {
+      expect(item.question.endsWith("?")).toBe(true);
+      expect(item.answer.length).toBeGreaterThan(90);
+      expect(item.href.startsWith("/")).toBe(true);
     }
   });
 });

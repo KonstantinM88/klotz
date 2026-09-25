@@ -11,6 +11,7 @@ import type { ContentRepository } from "@/repositories/content-repository";
 import { overviewPages } from "@/content/pages";
 import { serviceDetails } from "@/content/services";
 import { articleBodies } from "@/content/articles";
+import { homeContent } from "@/content/home";
 import assetManifest from "../../content/assets-manifest.json";
 
 function withAsset<
@@ -33,6 +34,9 @@ function withAsset<
 }
 
 export const localContentRepository: ContentRepository = {
+  async getHomeContent() {
+    return homeContent;
+  },
   async getOverviewPages() {
     return overviewPages;
   },
