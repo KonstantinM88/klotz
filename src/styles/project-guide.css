@@ -3,37 +3,66 @@
   right: 24px;
   bottom: 24px;
   z-index: 55;
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  min-height: 58px;
-  padding: 0 19px 0 10px;
-  border: 1px solid #d9ed97;
-  border-radius: 999px;
-  background: #202822;
-  color: #fff;
-  font:
-    650 12px var(--font-manrope),
-    sans-serif;
-  box-shadow: 0 12px 38px rgb(0 0 0 / 22%);
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  padding: 7px;
+  border: 1px solid rgb(217 237 151 / 75%);
+  border-radius: 50%;
+  background: rgb(32 40 34 / 72%);
+  box-shadow: 0 10px 28px rgb(0 0 0 / 16%);
   cursor: pointer;
 }
 .project-guide-trigger:hover {
-  background: #344439;
+  background: rgb(32 40 34 / 90%);
+}
+.project-guide-trigger:focus-visible {
+  outline: 3px solid #d9ed97;
+  outline-offset: 4px;
 }
 .project-guide-trigger__mark {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  background: #d9ed97;
-  color: #202822;
-  font-size: 24px;
-}
-.project-guide-trigger__arrow {
+  background: rgb(217 237 151 / 12%);
   color: #d9ed97;
-  font-size: 16px;
+  font-size: 25px;
+}
+.project-guide-trigger--arrival {
+  animation: project-guide-arrive 650ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.project-guide-trigger--arrival::after {
+  position: absolute;
+  inset: -7px;
+  border: 1px solid #d9ed97;
+  border-radius: 50%;
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  animation: project-guide-callout 1200ms 750ms ease-out 2 forwards;
+}
+@keyframes project-guide-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes project-guide-callout {
+  from {
+    opacity: 0.8;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.65);
+  }
 }
 .project-guide {
   position: fixed;
@@ -249,12 +278,13 @@
   .project-guide-trigger {
     right: 14px;
     bottom: calc(72px + env(safe-area-inset-bottom));
-    min-height: 50px;
-    padding: 0 14px 0 6px;
+    width: 52px;
+    height: 52px;
+    padding: 6px;
   }
   .project-guide-trigger__mark {
-    width: 35px;
-    height: 35px;
+    width: 38px;
+    height: 38px;
   }
   .project-guide {
     inset: auto 8px calc(68px + env(safe-area-inset-bottom)) 8px;
@@ -272,6 +302,15 @@
   }
   .project-guide__form {
     padding: 14px 20px 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-guide-trigger--arrival,
+  .project-guide-trigger--arrival::after {
+    animation: none;
+  }
+  .project-guide-trigger--arrival::after {
+    display: none;
   }
 }
 @media (max-width: 360px) {

@@ -25,6 +25,7 @@ const suggestions = [
   "Zaun & Tor",
   "Ablauf & Angebot",
 ];
+const HOME_TRIGGER_DELAY_MS = 5_500;
 
 export function ProjectGuide() {
   const pathname = usePathname();
@@ -37,10 +38,19 @@ export function ProjectGuide() {
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
   const [mode, setMode] = useState<"unknown" | "guided" | "live">("unknown");
+  const [homeTriggerReady, setHomeTriggerReady] = useState(false);
 
   useEffect(() => {
     dialog.current?.close();
   }, [pathname]);
+  useEffect(() => {
+    if (pathname !== "/" || homeTriggerReady) return;
+    const timeout = window.setTimeout(
+      () => setHomeTriggerReady(true),
+      HOME_TRIGGER_DELAY_MS,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [pathname, homeTriggerReady]);
   useLayoutEffect(() => {
     const scroller = conversation.current;
     const latest = latestMessage.current;
@@ -138,22 +148,22 @@ export function ProjectGuide() {
 
   return (
     <>
-      <button
-        ref={trigger}
-        type="button"
-        className="project-guide-trigger"
-        aria-haspopup="dialog"
-        aria-controls="project-guide-dialog"
-        onClick={open}
-      >
-        <span className="project-guide-trigger__mark" aria-hidden="true">
-          ✳
-        </span>
-        <span>Projektlotse</span>
-        <span className="project-guide-trigger__arrow" aria-hidden="true">
-          ↗
-        </span>
-      </button>
+      {(pathname !== "/" || homeTriggerReady) && (
+        <button
+          ref={trigger}
+          type="button"
+          className={`project-guide-trigger${pathname === "/" ? " project-guide-trigger--arrival" : ""}`}
+          aria-label="KI-Beratung öffnen"
+          title="KI-Beratung öffnen"
+          aria-haspopup="dialog"
+          aria-controls="project-guide-dialog"
+          onClick={open}
+        >
+          <span className="project-guide-trigger__mark" aria-hidden="true">
+            ✳
+          </span>
+        </button>
+      )}
       <dialog
         ref={dialog}
         id="project-guide-dialog"

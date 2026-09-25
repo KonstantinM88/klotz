@@ -224,6 +224,14 @@ test("reduced motion keeps all editorial content readable", async ({
           .length,
     ),
   ).toBe(0);
+  const trigger = page.getByRole("button", { name: "KI-Beratung öffnen" });
+  await expect(trigger).toBeVisible({ timeout: 8000 });
+  await expect(trigger).toHaveCSS("animation-name", "none");
+  expect(
+    await trigger.evaluate(
+      (element) => getComputedStyle(element, "::after").animationName,
+    ),
+  ).toBe("none");
 });
 
 test("project guide opens, answers, links and closes accessibly", async ({
@@ -249,7 +257,13 @@ test("project guide opens, answers, links and closes accessibly", async ({
     });
   });
   await page.goto("/");
-  const trigger = page.getByRole("button", { name: "Projektlotse" });
+  const trigger = page.getByRole("button", { name: "KI-Beratung öffnen" });
+  await expect(trigger).toHaveCount(0);
+  await page.waitForTimeout(2000);
+  await expect(trigger).toHaveCount(0);
+  await expect(trigger).toBeVisible({ timeout: 8000 });
+  await expect(trigger).not.toContainText("Projektlotse");
+  await expect(trigger).toHaveCSS("animation-name", "project-guide-arrive");
   await trigger.click();
   const dialog = page.getByRole("dialog", { name: /Ihr Projekt beginnt/ });
   await expect(dialog).toBeVisible();
@@ -315,8 +329,8 @@ test("project guide keeps the beginning of a long Russian answer visible", async
       ),
     });
   });
-  await page.goto("/");
-  await page.getByRole("button", { name: "Projektlotse" }).click();
+  await page.goto("/fenster-tueren");
+  await page.getByRole("button", { name: "KI-Beratung öffnen" }).click();
   const dialog = page.getByRole("dialog", { name: /Ihr Projekt beginnt/ });
   await dialog
     .getByLabel("Ihre Frage")
