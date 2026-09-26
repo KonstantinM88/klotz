@@ -8,12 +8,14 @@ import type {
 } from "@/domain/content/types";
 import type {
   ArticleBody,
+  CompanyPageContent,
   HomeContent,
   ServiceDetail,
   OverviewPageContent,
 } from "@/domain/content/presentation";
 
 export interface ContentRepository {
+  getCompanyPageContent(): Promise<CompanyPageContent>;
   getHomeContent(): Promise<HomeContent>;
   getOverviewPages(): Promise<OverviewPageContent[]>;
   getServices(): Promise<ServiceDetail[]>;

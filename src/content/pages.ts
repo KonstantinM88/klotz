@@ -112,9 +112,9 @@ export const overviewPages: OverviewPageContent[] = [
   {
     slug: "unternehmen",
     eyebrow: "KLOTZ aus Merseburg",
-    title: "Persönlich vor Ort. Verlässlich im Projekt.",
+    title: "Über uns",
     intro:
-      "Ein regionaler Fachbetrieb für hochwertige Bauelemente und Außenräume.",
+      "KLOTZ aus Merseburg-Meuschau: Geschichte, Arbeitsweise und Lösungen rund ums Haus.",
     heading: "Vertrauen entsteht durch Nähe und saubere Arbeit.",
     body: [
       "Die Unternehmensseite wird Herkunft, Haltung, Team und Arbeitsweise glaubwürdig verbinden. Für das Demo verwenden wir ausschließlich bestätigte Standort- und Leistungsdaten aus dem bestehenden Auftritt.",

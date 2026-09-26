@@ -6,6 +6,7 @@ const routes = [
   "/referenzen/glasschiebewaende",
   "/wissen/lamellendach-oder-glasdach",
   "/projekt-anfragen",
+  "/unternehmen",
 ];
 for (const path of routes)
   test(
@@ -109,6 +110,64 @@ test("reference filter and crawlable links", async ({ page }) => {
   await expect(page.locator(".reference-card")).toHaveCount(1);
   await page.locator(".reference-card").click();
   await expect(page).toHaveURL(/einzaeunung-stadtstadion/);
+});
+test("about page is linked in desktop and mobile navigation", async ({
+  page,
+  request,
+}, testInfo) => {
+  await page.goto("/");
+  if (testInfo.project.name === "mobile") {
+    await page.getByRole("button", { name: "Menü" }).click();
+    const about = page
+      .getByRole("navigation", { name: "Mobile Hauptnavigation" })
+      .getByRole("link", { name: "Über uns" });
+    await expect(about).toHaveAttribute("href", "/unternehmen");
+    await about.click();
+  } else {
+    const about = page
+      .getByRole("navigation", { name: "Hauptnavigation" })
+      .getByRole("link", { name: "Über uns" });
+    await expect(about).toHaveAttribute("href", "/unternehmen");
+    await about.click();
+  }
+  await expect(page).toHaveURL(/\/unternehmen$/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "Aus Meuschau",
+  );
+  await expect(
+    page.getByRole("heading", {
+      name: "Lösungen sehen. Materialien vergleichen.",
+    }),
+  ).toBeVisible();
+  await expect(page.locator(".company-team__card")).toHaveCount(7);
+  await expect(page.locator(".company-team__group")).toHaveCount(1);
+  for (const name of [
+    "Herr Klotz",
+    "Frau Shafiee",
+    "Herr Walther",
+    "Herr Kimmel",
+    "Montageteam",
+    "Frau Kriester",
+    "Herr Temgoua",
+    "Herr Degenhardt",
+  ]) {
+    await expect(
+      page.getByRole("heading", { name, exact: true }),
+    ).toBeVisible();
+  }
+  await expect(page.locator(".company-team__status")).toContainText(
+    "Demo / noch abzustimmen",
+  );
+  const alias = await request.get("/ueber-uns", { maxRedirects: 0 });
+  expect(alias.status()).toBe(308);
+  expect(alias.headers().location).toBe("/unternehmen");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "Menü" }).click();
+  await expect(
+    page
+      .getByRole("navigation", { name: "Mobile Hauptnavigation" })
+      .getByRole("link", { name: "Über uns" }),
+  ).toHaveAttribute("aria-current", "page");
 });
 test("form validates, preserves errors and never pretends to send", async ({
   page,

@@ -15,6 +15,7 @@ const routes = [
   "/referenzen/glasschiebewaende",
   "/wissen/lamellendach-oder-glasdach",
   "/projekt-anfragen",
+  "/unternehmen",
 ];
 const results = [];
 const chrome = await launch({

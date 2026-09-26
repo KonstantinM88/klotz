@@ -9,6 +9,7 @@ import {
 import { ProjectFilter } from "@/features/references/project-filter";
 import { pageMetadata } from "@/lib/metadata";
 import { ButtonLink } from "@/components/ui/button-link";
+import { CompanyPage } from "@/features/company/company-page";
 type Props = { params: Promise<{ slug: string }> };
 export async function generateStaticParams() {
   return (await repository.getOverviewPages()).map(({ slug }) => ({ slug }));
@@ -22,6 +23,10 @@ export async function generateMetadata({ params }: Props) {
 }
 export default async function OverviewPage({ params }: Props) {
   const { slug } = await params;
+  if (slug === "unternehmen") {
+    const content = await repository.getCompanyPageContent();
+    return <CompanyPage content={content} />;
+  }
   const [pages, services, categories, projects, articles, site] =
     await Promise.all([
       repository.getOverviewPages(),
@@ -44,11 +49,6 @@ export default async function OverviewPage({ params }: Props) {
       title: "Gut entscheiden. Besser planen.",
       intro:
         "Orientierung für Ihr Vorhaben: verständliche Antworten zu Dachlösungen, Kostenfaktoren und den nächsten Schritten.",
-    },
-    unternehmen: {
-      title: "In Meuschau zu Hause.",
-      intro:
-        "Bauelemente, Außenräume und persönliche Beratung. KLOTZ begleitet private Bauherren, Unternehmen und die Wohnungswirtschaft in der Region Halle–Leipzig.",
     },
     kontakt: {
       title: "Lernen wir Ihr Projekt kennen.",
@@ -173,74 +173,6 @@ export default async function OverviewPage({ params }: Props) {
             </div>
           </div>
         </section>
-      ) : null}
-      {slug === "unternehmen" ? (
-        <>
-          <section className="content-section">
-            <div className="shell editorial-grid">
-              <div>
-                <p className="eyebrow">
-                  <span />
-                  Regional verwurzelt
-                </p>
-                <h2>
-                  Kurze Wege.
-                  <br />
-                  Ein gemeinsamer Blick.
-                </h2>
-              </div>
-              <div className="content-copy">
-                <p>
-                  Der Standort von KLOTZ liegt in Merseburg-Meuschau. Von hier
-                  aus verbindet das Unternehmen Fachberatung, technische
-                  Vorbereitung und Montage für Projekte rund ums Haus.
-                </p>
-                <p>
-                  Zum Kundenkreis gehören Privatkunden, Hausverwaltungen,
-                  Wohnungsgesellschaften und mittelständische Unternehmen. Die
-                  Innen- und Außenausstellung am Firmenstandort bietet Raum,
-                  Materialien und Ausführungen im persönlichen Gespräch zu
-                  vergleichen.
-                </p>
-                <p>
-                  Ob einzelne Bauelemente oder ein neuer Außenbereich: Am Anfang
-                  stehen Ihre Anforderungen und die Gegebenheiten vor Ort.
-                </p>
-                <ButtonLink href="/kontakt">Standort & Kontakt</ButtonLink>
-              </div>
-            </div>
-          </section>
-          <section className="planning-section">
-            <div className="shell">
-              <p className="eyebrow">
-                <span />
-                Zusammenarbeit
-              </p>
-              <h2>Von der Idee bis zur Ausführung.</h2>
-              <div className="service-detail-grid">
-                {[
-                  "Beratung & Auswahl",
-                  "Aufmaß & Vorbereitung",
-                  "Montage & Übergabe",
-                ].map((t, i) => (
-                  <div key={t}>
-                    <span className="service-index">0{i + 1}</span>
-                    <h3>{t}</h3>
-                    <p>
-                      {
-                        [
-                          "Nutzung, Gestaltung und Rahmenbedingungen gemeinsam klären.",
-                          "Die Einbausituation aufnehmen und den Leistungsumfang abstimmen.",
-                          "Ausführung, Bedienung und weitere Pflege persönlich besprechen.",
-                        ][i]
-                      }
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        </>
       ) : null}
       {slug === "kontakt" ? (
         <section className="content-section">

@@ -9,6 +9,27 @@ export type OverviewPageContent = {
   features: string[];
 };
 export type ContentSection = { title: string; paragraphs: string[] };
+export type CompanyTeamEntry = {
+  id: string;
+  kind: "person" | "group";
+  name: string;
+  role: string;
+  description: string;
+  image: { src: string; alt: string; width: number; height: number };
+  status: ContentStatus;
+};
+export type CompanyPageContent = {
+  eyebrow: string;
+  title: string;
+  lead: string;
+  history: { eyebrow: string; title: string; paragraphs: string[] };
+  team: CompanyTeamEntry[];
+  audiences: { title: string; text: string; href: string }[];
+  process: { title: string; text: string }[];
+  showroom: { title: string; paragraphs: string[] };
+  sourceRefs: string[];
+  status: ContentStatus;
+};
 export type HomeFaqItem = {
   id: string;
   question: string;

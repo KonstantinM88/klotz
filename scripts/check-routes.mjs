@@ -9,7 +9,15 @@ const routes = Object.keys(manifest.routes).filter(
   (path) => !path.includes(".") && !path.startsWith("/_"),
 );
 const internalLinks = new Set();
+let redirects = 0;
 for (const path of routes) {
+  if (path === "/ueber-uns") {
+    const response = await fetch(base + path, { redirect: "manual" });
+    assert.equal(response.status, 308, path);
+    assert.equal(response.headers.get("location"), "/unternehmen");
+    redirects += 1;
+    continue;
+  }
   const response = await fetch(base + path);
   assert.equal(response.status, 200, path);
   assert.match(response.headers.get("x-robots-tag"), /noindex/, path);
@@ -30,7 +38,8 @@ for (const href of internalLinks) {
 }
 console.log(
   JSON.stringify({
-    pages: routes.length,
+    pages: routes.length - redirects,
+    redirects,
     internalLinks: internalLinks.size,
     status: "passed",
   }),

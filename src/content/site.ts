@@ -41,7 +41,7 @@ export const primaryNavigation: NavigationItem[] = [
   { label: "Gewerbekunden", href: "/gewerbekunden" },
   { label: "Referenzen", href: "/referenzen" },
   { label: "Wissen", href: "/wissen" },
-  { label: "Unternehmen", href: "/unternehmen" },
+  { label: "Über uns", href: "/unternehmen" },
 ];
 
 export const secondaryNavigation: NavigationItem[] = [
