@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const securityHeaders = [
-  { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
+  { key: "X-Robots-Tag", value: "noindex, noarchive" },
   {
     key: "Content-Security-Policy",
     value:

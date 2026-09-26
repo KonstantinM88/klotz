@@ -24,7 +24,11 @@ for (const path of routes)
         "content",
         /noindex/,
       );
+      expect(
+        await page.locator('meta[name="robots"]').getAttribute("content"),
+      ).not.toContain("nofollow");
       expect(response?.headers()["x-robots-tag"]).toContain("noindex");
+      expect(response?.headers()["x-robots-tag"]).not.toContain("nofollow");
       const canonical = await page
         .locator('link[rel="canonical"]')
         .getAttribute("href");
@@ -236,14 +240,17 @@ test("mobile menu keyboard and responsive widths", async ({ page }) => {
     ).toBe(true);
   }
 });
-test("unknown routes and indexing", async ({ request }) => {
+test("unknown routes and crawlable demo without indexing", async ({
+  request,
+}) => {
   expect((await request.get("/referenzen/nonexistent")).status()).toBe(404);
   expect((await request.get("/terrasse-garten/nonexistent")).status()).toBe(
     404,
   );
-  expect(await (await request.get("/robots.txt")).text()).toContain(
-    "Disallow: /",
-  );
+  const robots = await (await request.get("/robots.txt")).text();
+  expect(robots).toContain("User-Agent: *");
+  expect(robots).toContain("Allow: /");
+  expect(robots).not.toContain("Disallow: /");
   expect(await (await request.get("/sitemap.xml")).text()).not.toContain(
     "<loc>",
   );

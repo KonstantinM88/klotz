@@ -9,5 +9,5 @@ export default function robots(): MetadataRoute.Robots {
         sitemap: `${origin}/sitemap.xml`,
         host: origin,
       }
-    : { rules: { userAgent: "*", disallow: "/" } };
+    : { rules: { userAgent: "*", allow: "/" } };
 }

@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   },
   robots: isIndexingAllowed()
     ? { index: true, follow: true }
-    : { index: false, follow: false, noarchive: true },
+    : { index: false, follow: true, noarchive: true },
 };
 
 export const viewport: Viewport = {
